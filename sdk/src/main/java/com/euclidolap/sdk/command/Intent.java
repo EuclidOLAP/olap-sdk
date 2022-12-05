@@ -1,0 +1,15 @@
+package com.euclidolap.sdk.command;
+
+public enum Intent {
+
+    INTENT__TERMINAL_CONTROL,
+    INTENT__CHILD_NODE_JOIN,
+    INTENT__ALLOW,
+    INTENT__MDX,
+    INTENT__INSERT_CUBE_MEASURE_VALS,
+    INTENT__SUCCESSFUL,
+    INTENT__FAILURE,
+    INTENT__EXE_RESULT_DESC,
+    INTENT__UNKNOWN;
+
+}
