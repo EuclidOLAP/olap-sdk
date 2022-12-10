@@ -16,9 +16,9 @@
     </modules>
 
     <properties>
-        <!-- <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
-        <cid.version>1.0-SNAPSHOT</cid.version>
+        <!-- <cid.version>1.0-SNAPSHOT</cid.version>
         <lombok.version>1.18.24</lombok.version> -->
     </properties>
 

@@ -5,7 +5,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
-import java.util.Arrays;
 
 import static com.euclidolap.sdk.command.Intent.*;
 
@@ -16,8 +15,8 @@ public class Terminal {
 
     private Socket socket;
 
-    private  DataOutputStream output;
-    private  DataInputStream input;
+    private DataOutputStream output;
+    private DataInputStream input;
 
     public Terminal(String host, int port) {
         this.host = host;
@@ -63,12 +62,10 @@ public class Terminal {
         }
 
         int capacity = Utils.intFromBytes(capacityBytes);
-        System.out.println("capacity = " + capacity);
 
         byte[] payload = new byte[capacity - 4];
         try {
             input.readFully(payload);
-            System.out.println(Arrays.toString(payload));
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
@@ -76,9 +73,7 @@ public class Terminal {
 
     }
 
-    public void exec(String mdx) {
-        System.out.println(mdx);
-        //output.wri
+    public Result exec(String mdx) {
 
         int capacity;
         try {
@@ -106,8 +101,7 @@ public class Terminal {
             throw new RuntimeException(e);
         }
 
-         capacity = Utils.intFromBytes(capacityBytes);
-        System.out.println("capacity = " + capacity);
+        capacity = Utils.intFromBytes(capacityBytes);
 
         byte[] payload = new byte[capacity - 4];
         try {
@@ -118,18 +112,29 @@ public class Terminal {
         }
 
         short intent = Utils.shortFromBytes(payload[0], payload[1]);
-        System.out.println("intent = " + intent);
 
         if (INTENT__SUCCESSFUL.ordinal() == intent || INTENT__FAILURE.ordinal() == intent || INTENT__EXE_RESULT_DESC.ordinal() == intent) {
-            for (int i=2; i<payload.length;i++) {
+            for (int i = 2; i < payload.length; i++) {
                 if (payload[i] == 0) {
                     System.out.println(new String(payload, 2, i - 2));
                     break;
                 }
             }
+        } else if (INTENT__MULTIDIM_RESULT_BIN.ordinal() == intent) {
+            return Result.resolve(capacity, payload);
         } else {
             System.out.println("Unknown Information!");
         }
 
+        return null;
+    }
+
+    public void close() {
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 }

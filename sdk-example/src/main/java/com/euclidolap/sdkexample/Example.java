@@ -1,5 +1,6 @@
 package com.euclidolap.sdkexample;
 
+import com.euclidolap.sdk.MultiDimResult;
 import com.euclidolap.sdk.Terminal;
 
 public class Example {
@@ -9,8 +10,15 @@ public class Example {
 
         terminal.connect();
 
-        terminal.exec("select members([Goods], NOT_LEAFS) on 10, members(Calendar, LEAFS) on 100 from [Online Store];");
-        //terminal.exec("select children([Goods].[Kitchen & Dining]) on 0, children([Calendar].[ALL].[2021].[Q4]) on 1 from [Online Store] where (measure.[sales amount]);");
+        String mdx = "select " +
+                "{ ([Calendar].[2020].[Q1]), ([Calendar].[2020].[Q2]), ([Calendar].[2020].[Q3]), ([Calendar].[2020].[Q4]) } on 0, " +
+                "{ ([Payment Method].[Credit Card], measure.[sales amount]), ([Payment Method].[Debit Card], measure.[sales amount]), ([Payment Method].[Account Balance], measure.[sales amount]) } on 1 " +
+                "from [Online Store];";
 
+        MultiDimResult result = (MultiDimResult) terminal.exec(mdx);
+
+        result.show(System.out);
+
+        terminal.close();
     }
 }
