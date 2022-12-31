@@ -5,7 +5,9 @@ import com.euclidolap.sdk.domain.MemberInfo;
 import com.euclidolap.sdk.domain.SetInfo;
 import com.euclidolap.sdk.domain.TupleInfo;
 
-import java.io.PrintStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,12 +61,17 @@ public class MultiDimResult implements Result {
         return nullFlags[index] != 0 ? null : values[index];
     }
 
-    public void show(PrintStream out) {
+    public void show(OutputStream out) {
 
         int axesCount = axesCount();
 
         if (axesCount == 2) {
-            show2D(out);
+            try {
+                show2D(out);
+            } catch (IOException e) {
+                //e.printStackTrace();
+                throw new RuntimeException(e);
+            }
             return;
         }
 
@@ -74,7 +81,13 @@ public class MultiDimResult implements Result {
                 TupleInfo tupleInfo = axis.getTupleInfo(j);
                 for (int k = 0; k < tupleInfo.length(); k++) {
                     MemberInfo memberInfo = tupleInfo.getMemberInfo(k);
-                    out.println(memberInfo);
+                    try {
+                        out.write(memberInfo.toString().getBytes(StandardCharsets.UTF_8));
+                    } catch (IOException e) {
+                        //e.printStackTrace();
+                        throw new RuntimeException(e);
+                    }
+                    //out.println(memberInfo);
                 }
             }
         }
@@ -85,13 +98,19 @@ public class MultiDimResult implements Result {
             for (int i = 0; i < row.length(); i++) {
                 for (int j = 0; j < col.length(); j++) {
                     Double measureValue = getMeasureValue(i, j);
-                    out.println(measureValue);
+                    try {
+                        out.write(measureValue.toString().getBytes(StandardCharsets.UTF_8));
+                    } catch (IOException e) {
+                        //e.printStackTrace();
+                        throw new RuntimeException(e);
+                    }
+                    //out.println(measureValue);
                 }
             }
         }
     }
 
-    private void show2D(PrintStream out) {
+    private void show2D(OutputStream out) throws IOException {
 
         SetInfo rowSet = sets.get(0);
         SetInfo colSet = sets.get(1);
@@ -129,21 +148,26 @@ public class MultiDimResult implements Result {
         for (Object[] line : objects) {
             for (Object obj : line) {
                 if (obj == null) {
-                    out.print(String.format("%-20s", ""));
+                    out.write(String.format("%-20s", "").getBytes(StandardCharsets.UTF_8));
+                    //out.print(String.format("%-20s", ""));
                 } else if (obj instanceof MemberInfo) {
                     MemberInfo mi = (MemberInfo) obj;
                     if ("".equals(mi.getDisplay())) {
-                        out.print(String.format("%-20s", ""));
+                        out.write(String.format("%-20s", "").getBytes(StandardCharsets.UTF_8));
+                        //out.print(String.format("%-20s", ""));
                     } else {
-                        out.print(String.format("%-20s", "["+mi.getDisplay()+"]"));
+                        out.write(String.format("%-20s", "[" + mi.getDisplay() + "]").getBytes(StandardCharsets.UTF_8));
+                        //out.print(String.format("%-20s", "["+mi.getDisplay()+"]"));
                     }
 
                 } else if (obj instanceof Double) {
                     double val = (double) obj;
-                    out.print(String.format("%-20f", val));
+                    out.write(String.format("%-20f", val).getBytes(StandardCharsets.UTF_8));
+                    //out.print(String.format("%-20f", val));
                 }
             }
-            out.println();
+            out.write("\n".getBytes(StandardCharsets.UTF_8));
+            //out.println();
         }
     }
 }

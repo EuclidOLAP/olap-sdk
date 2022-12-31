@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.euclidolap</groupId>
     <artifactId>olap-sdk</artifactId>
-    <version>0.1.1</version>
+    <version>0.1.2</version>
 
     <name>${project.artifactId}</name>
     <description>EuclidOLAP SDK</description>
