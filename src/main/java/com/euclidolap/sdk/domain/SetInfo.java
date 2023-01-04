@@ -6,8 +6,10 @@ import java.util.List;
 public class SetInfo {
 
     private List<TupleInfo> ts = new ArrayList<>();
+    private int tupLenMax;
 
     public void ad(TupleInfo ti) {
+        tupLenMax = Math.max(ti.length(), tupLenMax);
         ts.add(ti);
     }
 
@@ -19,12 +21,7 @@ public class SetInfo {
         return ts.get(i);
     }
 
-    public int thickness() {
-        int t = ts.get(0).length();
-        for (int i = 1; i < ts.size(); i++) {
-            if (ts.get(i).length() > t)
-                t = ts.get(i).length();
-        }
-        return t;
+    public int getTupLenMax() {
+        return tupLenMax;
     }
 }

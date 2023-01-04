@@ -116,8 +116,8 @@ public class MultiDimResult implements Result {
         SetInfo colSet = sets.get(1);
         int rowLen = rowSet.length();
         int colLen = colSet.length();
-        int rowThickness = rowSet.thickness();
-        int colThickness = colSet.thickness();
+        int rowThickness = rowSet.getTupLenMax();
+        int colThickness = colSet.getTupLenMax();
 
         Object[][] objects = new Object[rowLen + colThickness][colLen + rowThickness];
 
