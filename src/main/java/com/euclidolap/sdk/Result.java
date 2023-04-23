@@ -55,7 +55,7 @@ public interface Result {
         double[] values = new double[(int) rs_len];
         for (int i = 0; i < rs_len; i++) {
             double val = Utils.doubleFromBytes(payload, idx);
-            idx+=8;
+            idx += 8;
             values[i] = val;
         }
         multiDimResult.setValues(values);

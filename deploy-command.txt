@@ -1,1 +1,0 @@
-E:\olap-sdk> mvn clean deploy -P release
