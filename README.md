@@ -1,1 +1,1 @@
-# olap-sdk
+# EuclidOLAP Java SDK
